@@ -1,0 +1,23 @@
+import requests
+import csv
+
+# This function returns a list of the symbols of all the stocks in the S&P500
+def get_sp500_symbols():
+  # Make a request to the Wikipedia page that contains the list of S&P500 stocks
+  url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
+  response = requests.get(url)
+  html = response.text
+
+  # Parse the HTML of the page to extract the list of S&P500 stock symbols
+  symbols = []
+  rows = html.split("<tr")
+  for row in rows:
+    if "exchange-common" in row:
+      cols = row.split("<td")
+      symbol = cols[1].split(">")[1].split("<")[0]
+      symbols.append(symbol)
+  return symbols
+
+# Print the list of S&P500 stock symbols
+symbols = get_sp500_symbols()
+print(symbols)
